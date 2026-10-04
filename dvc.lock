@@ -1,0 +1,22 @@
+schema: '2.0'
+stages:
+  data_cleaning:
+    cmd: uv run python src/data_cleaning.py
+    deps:
+    - path: data/Music Info.csv
+      hash: md5
+      md5: e63b74919a3cdada5c804df4666391c9
+      size: 14985870
+    - path: src/data_cleaning.py
+      hash: md5
+      md5: 0df52ce7af8a4987cbe4ae9bcdff5edb
+      size: 2379
+    - path: src/hybrid_recommender_system/utils/logger.py
+      hash: md5
+      md5: dc46196883844715974d4635ad18e6c5
+      size: 806
+    outs:
+    - path: data/cleaned_data.csv
+      hash: md5
+      md5: b5e99f8fcf0e54fa347c97490c779d67
+      size: 13709636

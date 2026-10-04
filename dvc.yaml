@@ -1,0 +1,10 @@
+stages:
+
+  data_cleaning:
+    cmd: uv run python src/data_cleaning.py
+    deps:
+      - src/data_cleaning.py
+      - src/hybrid_recommender_system/utils/logger.py
+      - data/Music Info.csv
+    outs:
+      - data/cleaned_data.csv
