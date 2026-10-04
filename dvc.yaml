@@ -18,3 +18,15 @@ stages:
     outs:
       - data/transformed_data.npz
       - transformer.joblib
+
+  interaction_data:
+    cmd: uv run python src/collaborative_filtering.py
+    deps:
+      - data/User Listening History.csv
+      - src/collaborative_filtering.py
+      - src/data_cleaning.py
+      - src/hybrid_recommender_system/utils/logger.py
+    outs:
+      - data/track_ids.npy
+      - data/collab_filtered_data.csv
+      - data/interaction_matrix.npz
