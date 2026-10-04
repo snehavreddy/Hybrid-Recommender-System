@@ -10,7 +10,25 @@ logger = get_logger(__name__)
 
 
 def clean_data(data):
-    """Clean the raw music dataset."""
+    """
+    Clean the raw music dataset.
+
+    The function performs the following operations:
+    1. Removes duplicate rows based on the 'spotify_id' column.
+    2. Drops the 'genre' and 'spotify_id' columns.
+    3. Fills missing values in the 'tags' column with 'no_tags'.
+    4. Converts the 'name', 'artist', and 'tags' columns to lowercase.
+
+    Parameters
+    ----------
+    data : pandas.DataFrame
+        Raw music dataset.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Cleaned music dataset.
+    """
 
     print("Starting data cleaning...")
     logger.info("Starting data cleaning")
@@ -25,6 +43,7 @@ def clean_data(data):
             artist=lambda x: x["artist"].str.lower(),
             tags=lambda x: x["tags"].str.lower()
         )
+        .reset_index(drop=True)
     )
 
     print(f"Data cleaning completed. Shape: {cleaned_data.shape}")
@@ -37,7 +56,23 @@ def clean_data(data):
 
 
 def data_for_content_filtering(data):
-    """Prepare data for content-based filtering."""
+    """
+    Prepare cleaned data for content-based filtering.
+
+    The function removes columns that are not required as input
+    features for the content-based recommendation model.
+
+    Parameters
+    ----------
+    data : pandas.DataFrame
+        Cleaned music dataset.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Dataset containing only the features required for
+        content-based filtering.
+    """
 
     print("Preparing data for content filtering...")
     logger.info("Preparing data for content filtering")
@@ -48,7 +83,21 @@ def data_for_content_filtering(data):
 
 
 def main(data_path):
-    """Load, clean and save the dataset."""
+    """
+    Run the data cleaning pipeline.
+
+    The function loads the raw music dataset, cleans the data,
+    and saves the cleaned dataset to the configured output path.
+
+    Parameters
+    ----------
+    data_path : str
+        Path to the raw music dataset.
+
+    Returns
+    -------
+    None
+    """
 
     try:
         print("Starting data cleaning pipeline...")
