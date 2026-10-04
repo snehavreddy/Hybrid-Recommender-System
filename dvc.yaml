@@ -23,10 +23,22 @@ stages:
     cmd: uv run python src/collaborative_filtering.py
     deps:
       - data/User Listening History.csv
+      - data/cleaned_data.csv
       - src/collaborative_filtering.py
-      - src/data_cleaning.py
       - src/hybrid_recommender_system/utils/logger.py
     outs:
       - data/track_ids.npy
       - data/collab_filtered_data.csv
       - data/interaction_matrix.npz
+
+  transformed_filtered_data:
+    cmd: uv run python src/transform_filtered_data.py
+    deps:
+      - data/collab_filtered_data.csv
+      - transformer.joblib
+      - src/transform_filtered_data.py
+      - src/data_cleaning.py
+      - src/content_based_filtering.py
+      - src/hybrid_recommender_system/utils/logger.py
+    outs:
+      - data/transformed_hybrid_data.npz
