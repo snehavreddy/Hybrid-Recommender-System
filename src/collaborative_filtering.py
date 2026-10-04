@@ -100,9 +100,6 @@ def save_pandas_data_to_csv(
     data : pandas.DataFrame
         DataFrame to be saved.
 
-    file_path : str
-        File path where the CSV file will be saved.
-
     Returns
     -------
     None
@@ -136,13 +133,10 @@ def save_sparse_matrix(
     matrix : scipy.sparse.csr_matrix
         Sparse matrix to be saved.
 
-    file_path : str
-        File path where the sparse matrix will be saved.
-
     Returns
     -------
     None
-        The sparse matrix is saved to the specified file path.
+        The matrix is saved to the specified file path.
     """
 
     print(f"Saving sparse matrix to {file_path}...")
@@ -382,31 +376,6 @@ def collaborative_recommendation(
     The function finds the requested song using its name and artist,
     retrieves its interaction vector, calculates cosine similarity
     against all tracks, and returns the top k most similar tracks.
-
-    Parameters
-    ----------
-    song_name : str
-        Name of the song for which recommendations are required.
-
-    artist_name : str
-        Name of the artist associated with the song.
-
-    track_ids : numpy.ndarray
-        Array mapping interaction matrix row indices to track IDs.
-
-    songs_data : pandas.DataFrame
-        Songs dataset containing song names, artists, and track IDs.
-
-    interaction_matrix : scipy.sparse.csr_matrix
-        Sparse track-user interaction matrix.
-
-    k : int, default=5
-        Number of recommendations to return.
-
-    Returns
-    -------
-    pandas.DataFrame
-        DataFrame containing the top recommended songs.
     """
 
     print(
@@ -559,8 +528,8 @@ def main():
     Returns
     -------
     None
-        The generated datasets and interaction matrix are saved
-        to their configured output paths.
+        The generated datasets and interaction matrix are saved to
+        their configured output paths.
     """
 
     try:
@@ -637,10 +606,39 @@ def main():
         print("Filtering songs data...")
         logger.info("Filtering songs data")
 
-        filter_songs_data(
+        filtered_songs_data = filter_songs_data(
             songs_data,
             unique_track_ids,
             filtered_data_save_path,
+        )
+
+        # Keep only listening-history records for tracks
+        # that exist in the cleaned songs dataset.
+        #
+        # We use an explicit Dask merge here instead of isin()
+        # so that the listening history and songs dataset have
+        # exactly the same track universe.
+        valid_track_ids = filtered_songs_data[
+            ["track_id"]
+        ]
+
+        user_data = user_data.merge(
+            dd.from_pandas(
+                valid_track_ids,
+                npartitions=1,
+            ),
+            on="track_id",
+            how="inner",
+        )
+
+        print(
+            "Filtered listening history to tracks "
+            "available in cleaned songs data."
+        )
+
+        logger.info(
+            "Filtered listening history to tracks "
+            "available in cleaned songs data."
         )
 
         print("Creating interaction matrix...")

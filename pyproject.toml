@@ -10,11 +10,12 @@ requires-python = ">=3.12"
 dependencies = [
     "category-encoders>=2.11.1",
     "dask[dataframe]>=2026.8.0",
-    "dvc>=3.67.1",
+    "dvc[s3]>=3.67.1",
     "ipykernel>=7.4.0",
     "matplotlib>=3.11.2",
     "numpy>=2.5.3",
     "pandas>=3.0.6",
+    "requests>=2.34.2",
     "scikit-learn>=1.9.1",
     "seaborn>=0.13.2",
     "streamlit>=1.65.0",
