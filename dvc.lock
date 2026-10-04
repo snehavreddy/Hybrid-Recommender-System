@@ -20,3 +20,31 @@ stages:
       hash: md5
       md5: b5e99f8fcf0e54fa347c97490c779d67
       size: 13709636
+  transform_data:
+    cmd: uv run python src/content_based_filtering.py
+    deps:
+    - path: data/cleaned_data.csv
+      hash: md5
+      md5: b5e99f8fcf0e54fa347c97490c779d67
+      size: 13709636
+    - path: src/content_based_filtering.py
+      hash: md5
+      md5: 77ede83aa27180db6b79024d47e5b6e5
+      size: 7887
+    - path: src/data_cleaning.py
+      hash: md5
+      md5: 0df52ce7af8a4987cbe4ae9bcdff5edb
+      size: 2379
+    - path: src/hybrid_recommender_system/utils/logger.py
+      hash: md5
+      md5: dc46196883844715974d4635ad18e6c5
+      size: 806
+    outs:
+    - path: data/transformed_data.npz
+      hash: md5
+      md5: f32fa1890a52bed4fe44aaac84bf5815
+      size: 4522794
+    - path: transformer.joblib
+      hash: md5
+      md5: b268131da2423077797f315ecc02dfba
+      size: 135933

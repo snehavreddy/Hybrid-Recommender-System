@@ -1,10 +1,20 @@
 stages:
-
   data_cleaning:
     cmd: uv run python src/data_cleaning.py
     deps:
+      - data/Music Info.csv
       - src/data_cleaning.py
       - src/hybrid_recommender_system/utils/logger.py
-      - data/Music Info.csv
     outs:
       - data/cleaned_data.csv
+
+  transform_data:
+    cmd: uv run python src/content_based_filtering.py
+    deps:
+      - data/cleaned_data.csv
+      - src/content_based_filtering.py
+      - src/data_cleaning.py
+      - src/hybrid_recommender_system/utils/logger.py
+    outs:
+      - data/transformed_data.npz
+      - transformer.joblib
